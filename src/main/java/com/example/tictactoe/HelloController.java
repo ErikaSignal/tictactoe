@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,8 +26,7 @@ public class HelloController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Player player1 = new Player('X');
         Player player2 = new Player('O');
-        Model m = new Model();
-        Player.model = m;
+        Player.model = new Model();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -41,7 +41,7 @@ public class HelloController implements Initializable {
                             player = 1;
                             if(Player.model.detectWin() != null){
                                 turn.setText("Player X win!");
-                                String positions[] = Player.model.detectWin();
+                                String[] positions = Player.model.detectWin();
                                 for (String pos : positions){
                                     int x = Integer.parseInt(pos.split(",")[0]);
                                     int y = Integer.parseInt(pos.split(",")[1]);
@@ -64,7 +64,7 @@ public class HelloController implements Initializable {
                                 player = 0;
                                 if(Player.model.detectWin() != null){
                                     turn.setText("Player O win!");
-                                    String positions[] = Player.model.detectWin();
+                                    String[] positions = Player.model.detectWin();
                                     for(String pos : positions){
                                         int x = Integer.parseInt(pos.split(",")[0]);
                                         int y = Integer.parseInt(pos.split(",")[1]);
@@ -98,7 +98,7 @@ public class HelloController implements Initializable {
         ObservableList<Node> children = gridpane.getChildren();
 
         for (Node node : children){
-            if(gridpane.getRowIndex(node) == row && gridpane.getColumnIndex(node) == column){
+            if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
                 result = node;
                 break;
             }
@@ -107,10 +107,12 @@ public class HelloController implements Initializable {
     }
 
     public String getURL(String name){
-        File f = new File(name);
-        String absolute = f.getAbsolutePath();
-        absolute = absolute.substring(0, absolute.length() - name.length());
-        return "file:\\"+absolute+"src\\main\\java\\com\\example\\tictactoe\\images\\"+name;
+        File file = new File("src/main/java/com/example/tictactoe/images/" + name);
+        try {
+            return file.toURI().toURL().toString();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void update(char[][] grid){
@@ -121,31 +123,26 @@ public class HelloController implements Initializable {
                         ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
                         imv.setImage(new Image(getURL("x.blue.png")));
                     }
-                    ;
                     break;
                     case '0': {
                         ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
                         imv.setImage(new Image(getURL("o.red.png")));
                     }
-                    ;
                     break;
                     case '.': {
                         ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
                         imv.setImage(new Image(getURL("empty.png")));
                     }
-                    ;
                     break;
                     case '1': {
                         ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
                         imv.setImage(new Image(getURL("x.yellow.png")));
                     }
-                    ;
                     break;
                     case '2': {
                         ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
                         imv.setImage(new Image(getURL("o.yellow.png")));
                     }
-                    ;
                     break;
                 }
             }
