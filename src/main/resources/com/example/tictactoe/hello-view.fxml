@@ -6,11 +6,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tictactoe.HelloController">
    <children>
-      <AnchorPane prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #FD98D8;">
+      <AnchorPane prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #000000;">
          <children>
-            <Label fx:id="turn" layoutX="75.0" layoutY="27.0" prefHeight="46.0" prefWidth="149.0" text="Tic Tac Toe" textAlignment="CENTER">
+            <Label fx:id="turn" layoutX="83.0" layoutY="27.0" prefHeight="46.0" prefWidth="133.0" text="Label" textFill="WHITE">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Comic Sans MS" size="20.0" />
                </font></Label>
          </children>
       </AnchorPane>

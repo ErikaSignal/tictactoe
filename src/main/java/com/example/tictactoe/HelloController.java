@@ -8,10 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -107,7 +107,7 @@ public class HelloController implements Initializable {
     }
 
     public String getURL(String name){
-        File file = new File("src/main/java/com/example/tictactoe/images/" + name);
+        File file = new File("src/main/resources/com/example/tictactoe/images/" + name);
         try {
             return file.toURI().toURL().toString();
         } catch (MalformedURLException e) {
@@ -118,34 +118,38 @@ public class HelloController implements Initializable {
     void update(char[][] grid){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                switch (grid[i][j]){
-                    case 'X': {
-                        ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                        imv.setImage(new Image(getURL("x.blue.png")));
-                    }
-                    break;
-                    case '0': {
-                        ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                        imv.setImage(new Image(getURL("o.red.png")));
-                    }
-                    break;
-                    case '.': {
-                        ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                        imv.setImage(new Image(getURL("empty.png")));
-                    }
-                    break;
-                    case '1': {
-                        ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                        imv.setImage(new Image(getURL("x.yellow.png")));
-                    }
-                    break;
-                    case '2': {
-                        ImageView imv = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                        imv.setImage(new Image(getURL("o.yellow.png")));
-                    }
-                    break;
-                }
+                getImage(grid, i, j);
             }
+        }
+    }
+
+    private void getImage(char[][] grid, int i, int j) { //Method name ok?
+        switch (grid[i][j]){
+            case 'X': {
+                ImageView image1 = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                image1.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/x_blue.png")).toExternalForm()));
+            }
+            break;
+            case 'O': {
+                ImageView image2 = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                image2.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/o_red.png")).toExternalForm()));
+            }
+            break;
+            case '.': {
+                ImageView image3 = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                image3.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/empty.png")).toExternalForm()));
+            }
+            break;
+            case '1': {
+                ImageView image4 = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                image4.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/x_yellow.png")).toExternalForm()));
+            }
+            break;
+            case '2': {
+                ImageView image5 = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                image5.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/o_yellow.png")).toExternalForm()));
+            }
+            break;
         }
     }
 }
