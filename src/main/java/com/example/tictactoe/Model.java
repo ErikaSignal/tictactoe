@@ -3,6 +3,8 @@ package com.example.tictactoe;
 public class Model {
     char[][] grid;
     int counter;
+    private static final int GRID_SIZE = 3;
+    private static final int WINNING_SEQUENCE_LENGTH = GRID_SIZE;
 
     public Model(){
         counter = 0;
@@ -20,12 +22,12 @@ public class Model {
     }
 
     public boolean isFull(){
-        return counter == 9;
+        return counter == WINNING_SEQUENCE_LENGTH;
     }
 
     public String[] detectWin(){
         String[] sequence;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < GRID_SIZE; i++) {
             if(grid[i][0] == grid[i][1] && grid[i][0] == grid[i][2]){
                 if(grid[i][0] != '.'){
                     sequence = new String[3];
@@ -36,7 +38,7 @@ public class Model {
                 }
             }
         }
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < GRID_SIZE; j++) {
             if(grid[0][j] == grid[1][j] && grid[0][j] == grid[2][j]){
                 if(grid[0][j] != '.'){
                     sequence = new String[3];

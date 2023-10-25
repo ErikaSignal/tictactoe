@@ -22,14 +22,16 @@ public class HelloController implements Initializable {
     private Label turn;
     static int player = 0;
 
+    private static final int GRID_SIZE = 3;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Player player1 = new Player('X');
         Player player2 = new Player('O');
         Player.model = new Model();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
                 ImageView imageView = new ImageView(getURL("empty.png"));
                 final int col = i;
                 final int row = j;
@@ -116,8 +118,8 @@ public class HelloController implements Initializable {
     }
 
     void update(char[][] grid){
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
                 getImage(grid, i, j);
             }
         }
