@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tictactoe.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tictactoe.HelloController">
    <children>
       <AnchorPane prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #000000;">
          <children>
@@ -26,5 +27,27 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
+      <AnchorPane layoutY="401.0" prefHeight="100.0" prefWidth="300.0">
+         <children>
+             <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #000000;">
+                 <Label text="Player X Score: 0" textFill="WHITE">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+               </Label>
+                 <Label text="Player O Score: 0" textFill="WHITE">
+                  <VBox.margin>
+                     <Insets top="2.0" />
+                  </VBox.margin>
+               </Label>
+                 <Button fx:id="replayButton" text="Replay">
+                  <VBox.margin>
+                     <Insets top="5.0" />
+                  </VBox.margin>
+               </Button>
+                 <!-- Rest of your UI -->
+             </VBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

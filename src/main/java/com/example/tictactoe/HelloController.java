@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,12 +18,17 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable {
     @FXML
     private GridPane map;
-
     @FXML
     private Label turn;
+
     static int player = 0;
 
     private static final int GRID_SIZE = 3;
+
+    @FXML
+    private Button replayButton;
+
+    private boolean gameActive = true;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -30,55 +36,63 @@ public class HelloController implements Initializable {
         Player player2 = new Player('O');
         Player.model = new Model();
 
+        replayButton.setOnAction(event -> resetGame());
+
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 ImageView imageView = new ImageView(getURL("empty.png"));
                 final int col = i;
                 final int row = j;
-
                 imageView.setOnMouseClicked(evt -> {
-                    if(player == 0){
-                        if(Player.model.isEmpty(row, col)){
+                    if (!gameActive) {
+                        return;
+                    }
+                    if (player == 0) {
+                        if (Player.model.isEmpty(row, col)) {
                             player1.Play(row, col);
                             player = 1;
-                            if(Player.model.detectWin() != null){
+                            if (Player.model.detectWin() != null) {
                                 turn.setText("Player X win!");
                                 String[] positions = Player.model.detectWin();
-                                for (String pos : positions){
+                                for (String pos : positions) {
                                     int x = Integer.parseInt(pos.split(",")[0]);
                                     int y = Integer.parseInt(pos.split(",")[1]);
                                     player1.setMark('1');
                                     player1.Play(x, y);
                                 }
-                            }else {
-                                if(Player.model.isFull()){
+                                gameActive = false;
+                            } else {
+                                if (Player.model.isFull()) {
                                     turn.setText("Game over");
                                     player = 1;
-                                }else {
+                                    gameActive = false;
+                                } else {
                                     turn.setText("Player O turn");
                                 }
                             }
                         }
-                    }else {
-                        if(player != -1){
-                            if(Player.model.isEmpty(row, col)){
+                    } else {
+                        if (player != -1) {
+                            if (Player.model.isEmpty(row, col)) {
                                 player2.Play(row, col);
                                 player = 0;
-                                if(Player.model.detectWin() != null){
+                                if (Player.model.detectWin() != null) {
                                     turn.setText("Player O win!");
                                     String[] positions = Player.model.detectWin();
-                                    for(String pos : positions){
+                                    for (String pos : positions) {
                                         int x = Integer.parseInt(pos.split(",")[0]);
                                         int y = Integer.parseInt(pos.split(",")[1]);
                                         player1.setMark('2');
                                         player1.Play(x, y);
                                     }
                                     player = -1;
-                                }else {
-                                    if(Player.model.isFull()){
+                                    gameActive = false;
+                                } else {
+                                    if (Player.model.isFull()) {
                                         turn.setText("Game over");
                                         player = -1;
-                                    }else {
+                                        gameActive = false;
+                                    } else {
                                         turn.setText("Player X turn");
                                     }
                                 }
@@ -129,15 +143,34 @@ public class HelloController implements Initializable {
         ImageView imageView = (ImageView) getNodeByRowColumnIndex(i, j, map);
         String imageName;
         switch (grid[i][j]) {
-            case 'X' -> imageName = "x_blue.png";
-            case 'O' -> imageName = "o_red.png";
+            case 'X', '1' -> imageName = "x_blue.png";
+            case 'O', '2' -> imageName = "o_red.png";
             case '.' -> imageName = "empty.png";
-            case '1' -> imageName = "x_yellow.png";
-            case '2' -> imageName = "o_yellow.png";
             default -> {
                 return;
             }
         }
         imageView.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/" + imageName)).toExternalForm()));
+    }
+
+    private void resetGame() {
+        Player.model.reset();
+        player = 0;
+        if (Player.player1 == null) {
+            Player.player1 = new Player('X');
+        }
+        if (Player.player2 == null) {
+            Player.player2 = new Player('O');
+        }
+        Player.player1.setMark('X');
+        Player.player2.setMark('O');
+        turn.setText("Player X turn");
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                ImageView imageView = (ImageView) getNodeByRowColumnIndex(i, j, map);
+                imageView.setImage(new Image(getURL("empty.png")));
+            }
+        }
+        gameActive = true;
     }
 }

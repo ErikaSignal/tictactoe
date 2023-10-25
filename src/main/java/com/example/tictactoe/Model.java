@@ -7,10 +7,17 @@ public class Model {
     private static final int WINNING_SEQUENCE_LENGTH = GRID_SIZE * GRID_SIZE;
 
     public Model(){
-        counter = 0;
-        grid = new char[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        grid = new char[GRID_SIZE][GRID_SIZE];
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                grid[i][j] = '.';
+            }
+        }
+    }
+
+    public void reset() {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
                 grid[i][j] = '.';
             }
         }
