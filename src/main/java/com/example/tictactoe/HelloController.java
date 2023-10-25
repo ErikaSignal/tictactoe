@@ -125,33 +125,19 @@ public class HelloController implements Initializable {
         }
     }
 
-    private void getImage(char[][] grid, int i, int j) { //Method name ok?
-        switch (grid[i][j]){
-            case 'X': {
-                ImageView image1 = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                image1.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/x_blue.png")).toExternalForm()));
+    private void getImage(char[][] grid, int i, int j) {
+        ImageView imageView = (ImageView) getNodeByRowColumnIndex(i, j, map);
+        String imageName;
+        switch (grid[i][j]) {
+            case 'X' -> imageName = "x_blue.png";
+            case 'O' -> imageName = "o_red.png";
+            case '.' -> imageName = "empty.png";
+            case '1' -> imageName = "x_yellow.png";
+            case '2' -> imageName = "o_yellow.png";
+            default -> {
+                return;
             }
-            break;
-            case 'O': {
-                ImageView image2 = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                image2.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/o_red.png")).toExternalForm()));
-            }
-            break;
-            case '.': {
-                ImageView image3 = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                image3.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/empty.png")).toExternalForm()));
-            }
-            break;
-            case '1': {
-                ImageView image4 = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                image4.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/x_yellow.png")).toExternalForm()));
-            }
-            break;
-            case '2': {
-                ImageView image5 = (ImageView) getNodeByRowColumnIndex(i, j, map);
-                image5.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/o_yellow.png")).toExternalForm()));
-            }
-            break;
         }
+        imageView.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/" + imageName)).toExternalForm()));
     }
 }

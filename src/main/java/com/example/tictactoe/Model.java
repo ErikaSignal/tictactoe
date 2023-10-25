@@ -4,7 +4,7 @@ public class Model {
     char[][] grid;
     int counter;
     private static final int GRID_SIZE = 3;
-    private static final int WINNING_SEQUENCE_LENGTH = GRID_SIZE;
+    private static final int WINNING_SEQUENCE_LENGTH = GRID_SIZE * GRID_SIZE;
 
     public Model(){
         counter = 0;
