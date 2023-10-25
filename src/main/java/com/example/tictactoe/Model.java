@@ -37,7 +37,7 @@ public class Model {
             }
         }
         for (int j = 0; j < 3; j++) {
-            if(grid[0][j] == grid[1][j] && grid[0][j] == grid[j][0]){
+            if(grid[0][j] == grid[1][j] && grid[0][j] == grid[2][j]){
                 if(grid[0][j] != '.'){
                     sequence = new String[3];
                     sequence[0] = 0 + "," +j;
