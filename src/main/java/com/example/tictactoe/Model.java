@@ -21,6 +21,7 @@ public class Model {
                 grid[i][j] = '.';
             }
         }
+        counter = 0;
     }
 
     void set(int x, int y, char mark){
