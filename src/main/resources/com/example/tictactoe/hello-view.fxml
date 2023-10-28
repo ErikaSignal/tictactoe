@@ -30,12 +30,12 @@
       <AnchorPane layoutY="401.0" prefHeight="100.0" prefWidth="300.0">
          <children>
              <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #000000;">
-                 <Label text="Player X Score: 0" textFill="WHITE">
+                 <Label fx:id="player1Score" text="Player X score: 0" textFill="WHITE">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin>
                </Label>
-                 <Label text="Player O Score: 0" textFill="WHITE">
+                 <Label fx:id="player2Score" text="Player O score: 0" textFill="WHITE">
                   <VBox.margin>
                      <Insets top="2.0" />
                   </VBox.margin>
@@ -45,7 +45,6 @@
                      <Insets top="5.0" />
                   </VBox.margin>
                </Button>
-                 <!-- Rest of your UI -->
              </VBox>
          </children>
       </AnchorPane>

@@ -20,14 +20,17 @@ public class HelloController implements Initializable {
     private GridPane map;
     @FXML
     private Label turn;
-
-    static int player = 0;
-
-    private static final int GRID_SIZE = 3;
-
     @FXML
     private Button replayButton;
+    @FXML
+    private Label player1Score;
+    @FXML
+    private Label player2Score;
 
+    static int player = 0;
+    static int player1score = 0;
+    static int player2score = 0;
+    private static final int GRID_SIZE = 3;
     private boolean gameActive = true;
 
     @Override
@@ -54,6 +57,8 @@ public class HelloController implements Initializable {
                             if (Player.model.detectWin() != null) {
                                 turn.setText("Player X win!");
                                 detectWin(player1);
+                                player1score++;
+                                player1Score.setText("Player X score: " + player1score);
                             } else {
                                 if (Player.model.isFull()) {
                                     turn.setText("Game over");
@@ -71,6 +76,8 @@ public class HelloController implements Initializable {
                             if (Player.model.detectWin() != null) {
                                 turn.setText("Player O win!");
                                 detectWin(player2);
+                                player2score++;
+                                player2Score.setText("Player O score: " + player2score);
                             } else {
                                 if (Player.model.isFull()) {
                                     turn.setText("Game over");
