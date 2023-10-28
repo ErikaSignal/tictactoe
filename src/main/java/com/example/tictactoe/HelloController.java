@@ -53,14 +53,7 @@ public class HelloController implements Initializable {
                             player = 1;
                             if (Player.model.detectWin() != null) {
                                 turn.setText("Player X win!");
-                                String[] positions = Player.model.detectWin();
-                                for (String pos : positions) {
-                                    int x = Integer.parseInt(pos.split(",")[0]);
-                                    int y = Integer.parseInt(pos.split(",")[1]);
-                                    //player1.setMark('1');
-                                    player1.Play(x, y);
-                                }
-                                gameActive = false;
+                                detectWin(player1);
                             } else {
                                 if (Player.model.isFull()) {
                                     turn.setText("Game over");
@@ -77,14 +70,7 @@ public class HelloController implements Initializable {
                             player = 0;
                             if (Player.model.detectWin() != null) {
                                 turn.setText("Player O win!");
-                                String[] positions = Player.model.detectWin();
-                                for (String pos : positions) {
-                                    int x = Integer.parseInt(pos.split(",")[0]);
-                                    int y = Integer.parseInt(pos.split(",")[1]);
-                                    //player2.setMark('0');
-                                    player2.Play(x, y);
-                                }
-                                gameActive = false;
+                                detectWin(player2);
                             } else {
                                 if (Player.model.isFull()) {
                                     turn.setText("Game over");
@@ -104,6 +90,16 @@ public class HelloController implements Initializable {
             }
         }
         turn.setText("Player X turn");
+    }
+
+    private void detectWin(Player player1) {
+        String[] positions = Player.model.detectWin();
+        for (String pos : positions) {
+            int x = Integer.parseInt(pos.split(",")[0]);
+            int y = Integer.parseInt(pos.split(",")[1]);
+            player1.Play(x, y);
+        }
+        gameActive = false;
     }
 
     public static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridpane){
@@ -153,14 +149,6 @@ public class HelloController implements Initializable {
     private void resetGame() {
         Player.model.reset();
         player = 0;
-        /*if (Player.player1 == null) {
-            Player.player1 = new Player('X');
-        }
-        if (Player.player2 == null) {
-            Player.player2 = new Player('O');
-        }
-        Player.player1.setMark('X');
-        Player.player2.setMark('O');*/
         turn.setText("Player X turn");
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
