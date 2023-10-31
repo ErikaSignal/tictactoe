@@ -13,9 +13,12 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
+    Player player1 = new Player('X');
+    Player player2 = new Player('O');
     @FXML
     private GridPane map;
     @FXML
@@ -35,8 +38,7 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Player player1 = new Player('X');
-        Player player2 = new Player('O');
+
         Player.model = new Model();
 
         replayButton.setOnAction(event -> resetGame());
@@ -44,44 +46,35 @@ public class HelloController implements Initializable {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 ImageView imageView = new ImageView(getURL("empty.png"));
-                final int col = i;
-                final int row = j;
+                final int[] col = {i};
+                final int[] row = {j};
                 imageView.setOnMouseClicked(evt -> {
                     if (!gameActive) {
                         return;
                     }
                     if (player == 0) {
-                        if (Player.model.isEmpty(row, col)) {
-                            player1.Play(row, col);
-                            player = 1;
+                        if (Player.model.isEmpty(row[0], col[0])) {
+                            playerMove(row[0], col[0]);
                             if (Player.model.detectWin() != null) {
                                 turn.setText("Player X win!");
                                 detectWin(player1);
                                 player1score++;
                                 player1Score.setText("Player X score: " + player1score);
-                            } else {
-                                if (Player.model.isFull()) {
+                            } else if(Player.model.isFull()){
                                     turn.setText("Game over");
                                     player = 1;
                                     gameActive = false;
-                                } else {
-                                    turn.setText("Player O turn");
-                                }
-                            }
-                        }
-                    } else {
-                        if (Player.model.isEmpty(row, col)) {
-                            player2.Play(row, col);
-                            player = 0;
-                            if (Player.model.detectWin() != null) {
-                                turn.setText("Player O win!");
-                                detectWin(player2);
-                                player2score++;
-                                player2Score.setText("Player O score: " + player2score);
                             } else {
-                                if (Player.model.isFull()) {
+                                turn.setText("Player O turn");
+                                computerMove();
+                                if (Player.model.detectWin() != null) {
+                                    turn.setText("Player O win!");
+                                    detectWin(player2);
+                                    player2score++;
+                                    player2Score.setText("Player O score: " + player2score);
+                                    gameActive = false;
+                                } else if (Player.model.isFull()) {
                                     turn.setText("Game over");
-                                    player = 0;
                                     gameActive = false;
                                 } else {
                                     turn.setText("Player X turn");
@@ -97,6 +90,24 @@ public class HelloController implements Initializable {
             }
         }
         turn.setText("Player X turn");
+    }
+
+    private void playerMove(int row, int col) {
+        if (Player.model.isEmpty(row, col)) {
+            player1.Play(row, col);
+            player = 1;
+        }
+    }
+
+    private void computerMove() {
+        Random random = new Random();
+        int row, col;
+        do {
+            row = random.nextInt(GRID_SIZE);
+            col = random.nextInt(GRID_SIZE);
+        } while (!Player.model.isEmpty(row, col));
+        player2.Play(row, col);
+        player = 0;
     }
 
     private void detectWin(Player player1) {
