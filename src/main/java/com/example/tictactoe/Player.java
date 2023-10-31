@@ -11,12 +11,4 @@ public class Player {
     public void Play(int x, int y){
         model.set(x, y, mark);
     }
-
-    public char getMark() {
-        return mark;
-    }
-
-    public void setMark(char mark) {
-        this.mark = mark;
-    }
 }

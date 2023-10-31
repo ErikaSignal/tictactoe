@@ -78,10 +78,6 @@ public class Model {
         return null;
     }
 
-    public char[][] getGrid(){
-        return this.grid;
-    }
-
     public boolean isEmpty(int x, int y){
         return grid[x][y] == '.';
     }
