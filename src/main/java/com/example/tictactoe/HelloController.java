@@ -30,21 +30,21 @@ public class HelloController implements Initializable {
     @FXML
     private Label player2Score;
 
+    private static final int gridSize = 3;
+    private boolean gameActive = true;
+
     static int player = 0;
     static int player1score = 0;
     static int player2score = 0;
-    private static final int GRID_SIZE = 3;
-    private boolean gameActive = true;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         Player.model = new Model();
 
         replayButton.setOnAction(event -> resetGame());
 
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
                 ImageView imageView = new ImageView(getURL("empty.png"));
                 final int[] col = {i};
                 final int[] row = {j};
@@ -103,8 +103,8 @@ public class HelloController implements Initializable {
         Random random = new Random();
         int row, col;
         do {
-            row = random.nextInt(GRID_SIZE);
-            col = random.nextInt(GRID_SIZE);
+            row = random.nextInt(gridSize);
+            col = random.nextInt(gridSize);
         } while (!Player.model.isEmpty(row, col));
         player2.Play(row, col);
         player = 0;
@@ -143,8 +143,8 @@ public class HelloController implements Initializable {
     }
 
     void update(char[][] grid){
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
                 getImage(grid, i, j);
             }
         }
@@ -168,8 +168,8 @@ public class HelloController implements Initializable {
         Player.model.reset();
         player = 0;
         turn.setText("Player X turn");
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
                 ImageView imageView = (ImageView) getNodeByRowColumnIndex(i, j, map);
                 imageView.setImage(new Image(getURL("empty.png")));
             }

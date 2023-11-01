@@ -3,79 +3,58 @@ package com.example.tictactoe;
 public class Model {
     char[][] grid;
     int counter;
-    private static final int GRID_SIZE = 3;
-    private static final int WINNING_SEQUENCE_LENGTH = GRID_SIZE * GRID_SIZE;
+    private static final int gridSize = 3;
+    private static final int winningSequenceLength = gridSize * gridSize;
 
     public Model(){
-        grid = new char[GRID_SIZE][GRID_SIZE];
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                grid[i][j] = '.';
-            }
-        }
+        initializeGrid();
     }
 
     public void reset() {
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        initializeGrid();
+        counter = 0;
+    }
+
+    private void initializeGrid() {
+        grid = new char[gridSize][gridSize];
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
                 grid[i][j] = '.';
             }
         }
-        counter = 0;
     }
 
     void set(int x, int y, char mark){
         this.grid[x][y] = mark;
-        counter += 1;
+        counter++;
     }
 
     public boolean isFull(){
-        return counter == WINNING_SEQUENCE_LENGTH;
+        return counter == winningSequenceLength;
     }
 
     public String[] detectWin(){
-        String[] sequence;
-        for (int i = 0; i < GRID_SIZE; i++) {
-            if(grid[i][0] == grid[i][1] && grid[i][0] == grid[i][2]){
-                if(grid[i][0] != '.'){
-                    sequence = new String[3];
-                    sequence[0] = i + "," +0;
-                    sequence[1] = i + "," +1;
-                    sequence[2] = i + "," +2;
-                    return sequence;
-                }
+        String[] sequence = null;
+        for (int i = 0; i < gridSize; i++) {
+            if (checkSequence(grid[i][0], grid[i][1], grid[i][2])) {
+                sequence = new String[]{i + ",0", i + ",1", i + ",2"};
+                return sequence;
             }
-        }
-        for (int j = 0; j < GRID_SIZE; j++) {
-            if(grid[0][j] == grid[1][j] && grid[0][j] == grid[2][j]){
-                if(grid[0][j] != '.'){
-                    sequence = new String[3];
-                    sequence[0] = 0 + "," +j;
-                    sequence[1] = 1 + "," +j;
-                    sequence[2] = 2 + "," +j;
-                    return sequence;
-                }
-            }
-        }
-        if(grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) {
-            if (grid[0][0] != '.') {
-                sequence = new String[3];
-                sequence[0] = 0 + "," + 0;
-                sequence[1] = 1 + "," + 1;
-                sequence[2] = 2 + "," + 2;
+            if (checkSequence(grid[0][i], grid[1][i], grid[2][i])) {
+                sequence = new String[]{"0," + i, "1," + i, "2," + i};
                 return sequence;
             }
         }
-        if(grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
-            if (grid[1][1] != '.') {
-                sequence = new String[3];
-                sequence[0] = 0 + "," + 2;
-                sequence[1] = 1 + "," + 1;
-                sequence[2] = 2 + "," + 0;
-                return sequence;
-            }
+        if (checkSequence(grid[0][0], grid[1][1], grid[2][2])) {
+            sequence = new String[]{"0,0", "1,1", "2,2"};
+        } else if (checkSequence(grid[0][2], grid[1][1], grid[2][0])) {
+            sequence = new String[]{"0,2", "1,1", "2,0"};
         }
-        return null;
+        return sequence;
+    }
+
+    private boolean checkSequence(char c1, char c2, char c3) {
+        return c1 != '.' && c1 == c2 && c2 == c3;
     }
 
     public boolean isEmpty(int x, int y){
