@@ -6,16 +6,16 @@ public class Model {
     private static final int gridSize = 3;
     private static final int winningSequenceLength = gridSize * gridSize;
 
-    public Model(){
+    public Model(){ //calls initializeGrid and creates a 3x3 grid and fills it with '.' (empty)
         initializeGrid();
     }
 
-    public void reset() {
+    public void reset() { //clears the grid resets the game. sets counter to 0
         initializeGrid();
         counter = 0;
     }
 
-    private void initializeGrid() {
+    private void initializeGrid() { //creates a 3x3 grid and fills it with '.'
         grid = new char[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
@@ -24,16 +24,16 @@ public class Model {
         }
     }
 
-    void set(int x, int y, char mark){
+    void set(int x, int y, char mark){ //sets position (x, y) in the grid and gives mark ('X' or 'O'). Counter keeps track of moves made
         this.grid[x][y] = mark;
         counter++;
     }
 
-    public boolean isFull(){
+    public boolean isFull(){ //returns true if the grid is full
         return counter == winningSequenceLength;
     }
 
-    public String[] detectWin(){
+    public String[] detectWin(){ //checks for a winning sequence. Returns an array of strings representing the winning sequence positions
         String[] sequence = null;
         for (int i = 0; i < gridSize; i++) {
             if (checkSequence(grid[i][0], grid[i][1], grid[i][2])) {
@@ -53,11 +53,11 @@ public class Model {
         return sequence;
     }
 
-    private boolean checkSequence(char c1, char c2, char c3) {
+    private boolean checkSequence(char c1, char c2, char c3) { //helps to check for a winning sequence
         return c1 != '.' && c1 == c2 && c2 == c3;
     }
 
-    public boolean isEmpty(int x, int y){
+    public boolean isEmpty(int x, int y){ //checks if the position is empty ('.')
         return grid[x][y] == '.';
     }
 }

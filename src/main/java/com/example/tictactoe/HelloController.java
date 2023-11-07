@@ -19,6 +19,8 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable {
     Player player1 = new Player('X');
     Player player2 = new Player('O');
+    private static final int PLAYER_X = 0;
+    private static final int PLAYER_O = 1;
     @FXML
     private GridPane map;
     @FXML
@@ -33,12 +35,12 @@ public class HelloController implements Initializable {
     private static final int gridSize = 3;
     private boolean gameActive = true;
 
-    static int player = 0;
+    static int currentPlayer = PLAYER_X;
     static int player1score = 0;
     static int player2score = 0;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle) { //initializes the game board, sets up event handlers, and sets the initial turn to Player X
         Player.model = new Model();
 
         replayButton.setOnAction(event -> resetGame());
@@ -49,39 +51,7 @@ public class HelloController implements Initializable {
                 final int[] col = {i};
                 final int[] row = {j};
                 imageView.setOnMouseClicked(evt -> {
-                    if (!gameActive) {
-                        return;
-                    }
-                    if (player == 0) {
-                        if (Player.model.isEmpty(row[0], col[0])) {
-                            playerMove(row[0], col[0]);
-                            if (Player.model.detectWin() != null) {
-                                turn.setText("Player X win!");
-                                detectWin(player1);
-                                player1score++;
-                                player1Score.setText("Player X score: " + player1score);
-                            } else if(Player.model.isFull()){
-                                    turn.setText("Game over");
-                                    player = 1;
-                                    gameActive = false;
-                            } else {
-                                turn.setText("Player O turn");
-                                computerMove();
-                                if (Player.model.detectWin() != null) {
-                                    turn.setText("Player O win!");
-                                    detectWin(player2);
-                                    player2score++;
-                                    player2Score.setText("Player O score: " + player2score);
-                                    gameActive = false;
-                                } else if (Player.model.isFull()) {
-                                    turn.setText("Game over");
-                                    gameActive = false;
-                                } else {
-                                    turn.setText("Player X turn");
-                                }
-                            }
-                        }
-                    }
+                    if (handlePlayerClick(row, col)) return;
                     update(Player.model.grid);
                 });
                 map.setHgap(10);
@@ -92,14 +62,79 @@ public class HelloController implements Initializable {
         turn.setText("Player X turn");
     }
 
-    private void playerMove(int row, int col) {
-        if (Player.model.isEmpty(row, col)) {
-            player1.Play(row, col);
-            player = 1;
+    private boolean handlePlayerClick(int[] row, int[] col) {
+        if (!gameActive) {
+            return true;
+        }
+        if (currentPlayer == PLAYER_X) {
+            if (Player.model.isEmpty(row[0], col[0])) {
+                playerMove(row[0], col[0]);
+                playerCheck(player1, player1Score, new int[]{player1score});
+            }
+            if(currentPlayer == PLAYER_O && gameActive){
+                computerMove();
+                playerCheck(player2, player2Score, new int[]{player2score});
+            }
+        }
+        return false;
+    }
+
+    private void playerCheck(Player player, Label playerScoreLabel, int[] playerScore) {
+        char playerSymbol = player.mark;
+        if (Player.model.detectWin() != null) {
+            turn.setText("Player " + playerSymbol + " wins!");
+            detectWin(player);
+            playerScoreLabel.setText("Player " + playerSymbol + " score: " + ++playerScore[0]);
+            gameActive = false;
+        } else if (Player.model.isFull()) {
+            gameOver();
+        } else {
+            currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
+            turn.setText("Player " + currentPlayer + " turn");
         }
     }
 
-    private void computerMove() {
+    /*private void player1Check() {
+        if (Player.model.detectWin() != null) {
+            turn.setText("Player X win!");
+            detectWin(player1);
+            player1Score.setText("Player X score: " + ++player1score);
+            gameActive = false;
+        } else if(Player.model.isFull()){
+            gameOver();
+        } else {
+            currentPlayer = PLAYER_O;
+            turn.setText("Player O turn");
+        }
+    }
+
+    private void player2Check() {
+        if (Player.model.detectWin() != null) {
+            turn.setText("Player O win!");
+            detectWin(player2);
+            player2Score.setText("Player O score: " + ++player2score);
+            gameActive = false;
+        } else if (Player.model.isFull()) {
+            gameOver();
+        } else {
+            currentPlayer = PLAYER_X;
+            turn.setText("Player X turn");
+        }
+    }*/
+
+    private void gameOver() { //updates the UI to indicate that the game is over
+        turn.setText("Game over");
+        gameActive = false;
+    }
+
+    private void playerMove(int row, int col) { //handles the player's move, updates the model, and switches to Player O's turn
+        if (Player.model.isEmpty(row, col)) {
+            player1.Play(row, col);
+            //currentPlayer = PLAYER_O;
+        }
+    }
+
+    private void computerMove() { //handles computer's move by randomly selecting an empty position and updates the model. Switches to Player X's turn
         Random random = new Random();
         int row, col;
         do {
@@ -107,10 +142,10 @@ public class HelloController implements Initializable {
             col = random.nextInt(gridSize);
         } while (!Player.model.isEmpty(row, col));
         player2.Play(row, col);
-        player = 0;
+        //currentPlayer = PLAYER_X;
     }
 
-    private void detectWin(Player player1) {
+    private void detectWin(Player player1) { //detects the winning sequence and updates the UI accordingly. Ends the game
         String[] positions = Player.model.detectWin();
         for (String pos : positions) {
             int x = Integer.parseInt(pos.split(",")[0]);
@@ -120,7 +155,7 @@ public class HelloController implements Initializable {
         gameActive = false;
     }
 
-    public static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridpane){
+    public static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridpane){ //retrieves the node (ImageView) at the specified row and column in the GridPane
         Node result = null;
         ObservableList<Node> children = gridpane.getChildren();
 
@@ -133,7 +168,7 @@ public class HelloController implements Initializable {
         return result;
     }
 
-    public String getURL(String name){
+    public String getURL(String name){ //constructs a file URL for the image file based on its name
         File file = new File("src/main/resources/com/example/tictactoe/images/" + name);
         try {
             return file.toURI().toURL().toString();
@@ -142,7 +177,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    void update(char[][] grid){
+    void update(char[][] grid){ //updates the UI based on the current state of the game grid
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 getImage(grid, i, j);
@@ -150,7 +185,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    private void getImage(char[][] grid, int i, int j) {
+    private void getImage(char[][] grid, int i, int j) { //updates the image in the UI based on the character in the grid at position
         ImageView imageView = (ImageView) getNodeByRowColumnIndex(i, j, map);
         String imageName;
         switch (grid[i][j]) {
@@ -164,9 +199,9 @@ public class HelloController implements Initializable {
         imageView.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/" + imageName)).toExternalForm()));
     }
 
-    private void resetGame() {
+    private void resetGame() { //resets the game by clearing the grid, updating the UI, and resetting game-related variables
         Player.model.reset();
-        player = 0;
+        currentPlayer = PLAYER_X;
         turn.setText("Player X turn");
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
