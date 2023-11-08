@@ -62,65 +62,40 @@ public class HelloController implements Initializable {
         turn.setText("Player X turn");
     }
 
-    private boolean handlePlayerClick(int[] row, int[] col) {
+    private boolean handlePlayerClick(int[] row, int[] col) { //makes the player/computer moves and updates the score if there is a win
         if (!gameActive) {
             return true;
         }
         if (currentPlayer == PLAYER_X) {
             if (Player.model.isEmpty(row[0], col[0])) {
                 playerMove(row[0], col[0]);
-                playerCheck(player1, player1Score, new int[]{player1score});
+                player1score = playerCheck(player1, player1score);
+                player1Score.setText("Player X score: " + player1score);
             }
             if(currentPlayer == PLAYER_O && gameActive){
                 computerMove();
-                playerCheck(player2, player2Score, new int[]{player2score});
+                player2score = playerCheck(player2, player2score);
+                player2Score.setText("Player O score: " + player2score);
             }
         }
         return false;
     }
 
-    private void playerCheck(Player player, Label playerScoreLabel, int[] playerScore) {
+    private int playerCheck(Player player, int playerScore) { //checks for who's turn it is and prints it out. Also checks for win or game over
         char playerSymbol = player.mark;
         if (Player.model.detectWin() != null) {
             turn.setText("Player " + playerSymbol + " wins!");
             detectWin(player);
-            playerScoreLabel.setText("Player " + playerSymbol + " score: " + ++playerScore[0]);
+            playerScore++;
             gameActive = false;
         } else if (Player.model.isFull()) {
             gameOver();
         } else {
             currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
-            turn.setText("Player " + currentPlayer + " turn");
+            turn.setText("Player " + (currentPlayer == PLAYER_X ? "X" : "O") + " turn");
         }
+        return playerScore;
     }
-
-    /*private void player1Check() {
-        if (Player.model.detectWin() != null) {
-            turn.setText("Player X win!");
-            detectWin(player1);
-            player1Score.setText("Player X score: " + ++player1score);
-            gameActive = false;
-        } else if(Player.model.isFull()){
-            gameOver();
-        } else {
-            currentPlayer = PLAYER_O;
-            turn.setText("Player O turn");
-        }
-    }
-
-    private void player2Check() {
-        if (Player.model.detectWin() != null) {
-            turn.setText("Player O win!");
-            detectWin(player2);
-            player2Score.setText("Player O score: " + ++player2score);
-            gameActive = false;
-        } else if (Player.model.isFull()) {
-            gameOver();
-        } else {
-            currentPlayer = PLAYER_X;
-            turn.setText("Player X turn");
-        }
-    }*/
 
     private void gameOver() { //updates the UI to indicate that the game is over
         turn.setText("Game over");
@@ -130,7 +105,6 @@ public class HelloController implements Initializable {
     private void playerMove(int row, int col) { //handles the player's move, updates the model, and switches to Player O's turn
         if (Player.model.isEmpty(row, col)) {
             player1.Play(row, col);
-            //currentPlayer = PLAYER_O;
         }
     }
 
@@ -142,7 +116,6 @@ public class HelloController implements Initializable {
             col = random.nextInt(gridSize);
         } while (!Player.model.isEmpty(row, col));
         player2.Play(row, col);
-        //currentPlayer = PLAYER_X;
     }
 
     private void detectWin(Player player1) { //detects the winning sequence and updates the UI accordingly. Ends the game
