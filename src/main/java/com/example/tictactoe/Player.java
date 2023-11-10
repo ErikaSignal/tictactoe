@@ -9,6 +9,6 @@ public class Player {
     }
 
     public void Play(int x, int y){ //calls the set() method from the Model class to make a move at the specified position
-        model.set(x, y, mark);
+        model.setPosition(x, y, mark);
     }
 }

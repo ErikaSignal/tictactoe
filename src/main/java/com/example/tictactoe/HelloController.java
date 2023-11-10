@@ -52,7 +52,7 @@ public class HelloController implements Initializable {
                 final int[] row = {j};
                 imageView.setOnMouseClicked(evt -> {
                     if (handlePlayerClick(row, col)) return;
-                    update(Player.model.grid);
+                    updateUI(Player.model.grid);
                 });
                 map.setHgap(10);
                 map.setVgap(10);
@@ -150,7 +150,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    void update(char[][] grid){ //updates the UI based on the current state of the game grid
+    void updateUI(char[][] grid){ //updates the UI based on the current state of the game grid
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 getImage(grid, i, j);

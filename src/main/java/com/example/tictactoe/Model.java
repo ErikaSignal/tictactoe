@@ -24,7 +24,7 @@ public class Model {
         }
     }
 
-    void set(int x, int y, char mark){ //sets position (x, y) in the grid and gives mark ('X' or 'O'). Counter keeps track of moves made
+    void setPosition(int x, int y, char mark){ //sets position (x, y) in the grid and gives mark ('X' or 'O'). Counter keeps track of moves made
         this.grid[x][y] = mark;
         counter++;
     }
